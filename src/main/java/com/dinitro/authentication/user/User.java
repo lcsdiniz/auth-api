@@ -19,6 +19,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+    private String name;
     private String login;
     private String password;
     private UserRole role;
@@ -26,7 +27,8 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String login, String password, UserRole role) {
+    public User(String name, String login, String password, UserRole role) {
+        this.name = name;
         this.login = login;
         this.password = password;
         this.role = role;
@@ -38,6 +40,14 @@ public class User implements UserDetails {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getLogin() {

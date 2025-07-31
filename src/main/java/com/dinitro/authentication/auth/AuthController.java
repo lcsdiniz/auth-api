@@ -39,7 +39,7 @@ public class AuthController {
         if(this.userRepository.findByLogin(data.login()) != null) return ResponseEntity.badRequest().build();
         
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User user = new User(data.login(), encryptedPassword, data.role());
+        User user = new User(data.name(), data.login(), encryptedPassword, data.role());
         this.userRepository.save(user);
 
         return ResponseEntity.ok().build();
@@ -58,7 +58,7 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<String> refresh(@RequestHeader("Authorization") String header) {
         String refreshToken = header.replace("Bearer ", "");
-        
+
         var login = tokenService.extractUsername(refreshToken);
         UserDetails user = userRepository.findByLogin(login);
 
