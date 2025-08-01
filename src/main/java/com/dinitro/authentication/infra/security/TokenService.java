@@ -13,44 +13,48 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.dinitro.authentication.auth.TokenType;
 import com.dinitro.authentication.user.User;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class TokenService {
+
+    private final TokenRepository tokenRepository;
     private Algorithm algorithm;
 
-    public TokenService(@Value("${api.security.token.secret}") String secret) {
+    public TokenService(@Value("${api.security.token.secret}") String secret, TokenRepository tokenRepository) {
         this.algorithm = Algorithm.HMAC256(secret);
+        this.tokenRepository = tokenRepository;
     }
 
-    public String generateToken(User user, TokenType tokenType) {
+    public String generateAccessToken(User user) {
         try {
             return JWT.create()
                 .withIssuer("authentication")
                 .withSubject(user.getLogin())
-                .withExpiresAt(generateExpirationDate(tokenType))
+                .withExpiresAt(LocalDateTime.now().plusWeeks(1).toInstant(ZoneOffset.of("-03:00")))
                 .sign(algorithm);
         } catch (JWTCreationException e) {
             throw new RuntimeException("Error generating token", e);
         }
     }
 
-    private Instant generateExpirationDate(TokenType tokenType) {
-        var expirationDate = LocalDateTime.now();
-        switch (tokenType) {
-            case ACCESS:
-                expirationDate = expirationDate.plusMinutes(3);
-                break;
-            case REFRESH:
-                expirationDate = expirationDate.plusWeeks(1);
-                break;
-            default:
-                expirationDate = expirationDate.plusDays(1);
-                break;
-        }
+    public String generateRefreshToken(User user) {
+        try {
+            Instant expirationDate = LocalDateTime.now().plusWeeks(1).toInstant(ZoneOffset.of("-03:00"));
+            String token = JWT.create()
+                .withIssuer("authentication")
+                .withSubject(user.getLogin())
+                .withExpiresAt(LocalDateTime.now().plusWeeks(1).toInstant(ZoneOffset.of("-03:00")))
+                .sign(algorithm);
 
-        return expirationDate.toInstant(ZoneOffset.of("-03:00"));
+            tokenRepository.save(new Token(user, token, expirationDate));
+
+            return token;
+        } catch (JWTCreationException e) {
+            throw new RuntimeException("Error generating token", e);
+        }
     }
 
     public String extractUsername(String token) {
@@ -69,5 +73,11 @@ public class TokenService {
         } catch (Exception e) {
             return false;
         }
+    }
+    
+    @Transactional
+    public void deleteByUser(String refreshToken) {
+        var token = tokenRepository.findByValue(refreshToken).orElseThrow(null);
+        tokenRepository.deleteByUser(token.getUser());
     }
 }

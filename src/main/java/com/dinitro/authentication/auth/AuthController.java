@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+
     private UserRepository userRepository;
     private AuthenticationManager authenticationManager;
     private TokenService tokenService;
@@ -49,8 +50,8 @@ public class AuthController {
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var auth = authenticationManager.authenticate(usernamePassword);
-        var accessToken = tokenService.generateToken((User) auth.getPrincipal(), TokenType.ACCESS);
-        var refreshToken = tokenService.generateToken((User) auth.getPrincipal(), TokenType.REFRESH);
+        var accessToken = tokenService.generateAccessToken((User) auth.getPrincipal());
+        var refreshToken = tokenService.generateRefreshToken((User) auth.getPrincipal());
 
         return ResponseEntity.ok().body(new LoginResponseDTO(accessToken, refreshToken));
     }
@@ -66,8 +67,16 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        String newAccessToken = tokenService.generateToken((User) user, TokenType.ACCESS);
+        String newAccessToken = tokenService.generateAccessToken((User) user);
 
         return ResponseEntity.ok().body(newAccessToken);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Object> logout(@RequestHeader("Authorization") String header) {
+        String refreshToken = header.replace("Bearer ", "");
+        tokenService.deleteByUser(refreshToken);
+        
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,4 +1,4 @@
-package com.dinitro.authentication.auth;
+package com.dinitro.authentication.infra.security;
 
 public enum TokenType {
     REFRESH("refresh"),
