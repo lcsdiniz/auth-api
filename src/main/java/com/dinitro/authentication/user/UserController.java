@@ -1,5 +1,8 @@
 package com.dinitro.authentication.user;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dinitro.authentication.auth.MeResponseDTO;
 import com.dinitro.authentication.infra.security.TokenService;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 
 
 @RestController
@@ -30,5 +34,15 @@ public class UserController {
         User responseUser = (User) user;
 
         return ResponseEntity.ok().body(new MeResponseDTO(responseUser.getName(), responseUser.getLogin(), responseUser.getRole()));
+    }
+
+    @GetMapping("/list")
+    public List<UserListItemResponseDTO> list() {
+        List<User> usersList = userRepository.findAll();
+        
+        return usersList
+            .stream()
+            .map(user -> new UserListItemResponseDTO(user.getName(), user.getLogin(), user.getRole()))
+            .toList();
     }
 }

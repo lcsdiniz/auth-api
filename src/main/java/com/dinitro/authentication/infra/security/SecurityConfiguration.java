@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
@@ -30,6 +31,7 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                 .requestMatchers(HttpMethod.POST, "/auth/refresh").permitAll()
                 .requestMatchers(HttpMethod.GET, "/user/me").authenticated()
+                .requestMatchers(HttpMethod.GET, "/user/list").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
