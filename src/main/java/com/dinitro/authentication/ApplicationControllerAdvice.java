@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import com.dinitro.authentication.exception.ExpiredTokenException;
 import com.dinitro.authentication.exception.LoginAlreadyExistsException;
 
 import jakarta.validation.ConstraintViolationException;
@@ -50,5 +51,11 @@ public class ApplicationControllerAdvice {
             return ex.getName() + " should be of type " + typeName;
         }
         return "Argument type not valid";
+    }
+
+    @ExceptionHandler(ExpiredTokenException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public String handleExpiredTokenException(ExpiredTokenException ex) {
+        return ex.getMessage();
     }
 }

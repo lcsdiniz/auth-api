@@ -2,14 +2,11 @@ package com.dinitro.authentication.user;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dinitro.authentication.auth.MeResponseDTO;
-import com.dinitro.authentication.infra.security.TokenService;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
@@ -18,30 +15,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/user")
 
 public class UserController {
-    private UserRepository userRepository;
-    private TokenService tokenService;
+    private UserService userService;
 
-    public UserController(UserRepository userRepository, TokenService tokenService) {
-        this.userRepository = userRepository;
-        this.tokenService = tokenService;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/me")
-    public ResponseEntity<MeResponseDTO> postMethodName(@RequestHeader("Authorization") String header) {
-        String accessToken = header.replace("Bearer ", "");
-        UserDetails user = userRepository.findByLogin(tokenService.extractUsername(accessToken));
-        User responseUser = (User) user;
-
-        return ResponseEntity.ok().body(new MeResponseDTO(responseUser.getName(), responseUser.getLogin(), responseUser.getRole()));
+    public MeResponseDTO me(@RequestHeader("Authorization") String header) {
+        return userService.me(header);
     }
 
     @GetMapping("/list")
     public List<UserListItemResponseDTO> list() {
-        List<User> usersList = userRepository.findAll();
-        
-        return usersList
-            .stream()
-            .map(user -> new UserListItemResponseDTO(user.getName(), user.getLogin(), user.getRole()))
-            .toList();
+        return userService.list();
     }
 }

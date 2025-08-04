@@ -30,60 +30,30 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+    private AuthService authService;
 
-    private UserRepository userRepository;
-    private AuthenticationManager authenticationManager;
-    private TokenService tokenService;
-
-    public AuthController(UserRepository userRepository, TokenService tokenService, AuthenticationManager authenticationManager) {
-        this.userRepository = userRepository;
-        this.tokenService = tokenService;
-        this.authenticationManager = authenticationManager;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public void register(@RequestBody @Valid RegisterDTO data) {
-        if(this.userRepository.findByLogin(data.login()) != null) throw new LoginAlreadyExistsException(data.login());
-        
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User user = new User(data.name(), data.login(), encryptedPassword, data.role());
-        this.userRepository.save(user);
+        authService.register(data);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthDTO data) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
-        var auth = authenticationManager.authenticate(usernamePassword);
-        var accessToken = tokenService.generateAccessToken((User) auth.getPrincipal());
-        var refreshToken = tokenService.generateRefreshToken((User) auth.getPrincipal());
-
-        return ResponseEntity.ok().body(new LoginResponseDTO(accessToken, refreshToken));
+    public LoginResponseDTO login(@RequestBody @Valid AuthDTO data) {
+        return authService.login(data);
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<Map<String, Object>> refresh(@RequestHeader("Authorization") String header) {
-        String refreshToken = header.replace("Bearer ", "");
-
-        var login = tokenService.extractUsername(refreshToken);
-        UserDetails user = userRepository.findByLogin(login);
-
-        if(!tokenService.isTokenValid(refreshToken, login)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        String newAccessToken = tokenService.generateAccessToken((User) user);
-        Map<String, Object> response = new HashMap<>();
-        response.put("accessToken", newAccessToken);
-        
-        return ResponseEntity.ok().body(response);
+    public Map<String, Object> refresh(@RequestHeader("Authorization") String header) {
+        return authService.refresh(header);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Object> logout(@RequestHeader("Authorization") String header) {
-        String refreshToken = header.replace("Bearer ", "");
-        tokenService.deleteByUser(refreshToken);
-        
-        return ResponseEntity.noContent().build();
+    public void logout(@RequestHeader("Authorization") String header) {
+        authService.logout(header);
     }
 }
