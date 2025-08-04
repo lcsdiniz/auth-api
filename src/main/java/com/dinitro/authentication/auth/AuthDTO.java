@@ -1,6 +1,11 @@
 package com.dinitro.authentication.auth;
 
+import org.hibernate.validator.constraints.Length;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public record AuthDTO(
-    String login,
-    String password
+    @NotBlank @NotNull String login,
+    @NotBlank @NotNull @Length(min = 6) String password
 ) {}
