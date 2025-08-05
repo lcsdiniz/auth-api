@@ -63,6 +63,6 @@ public class AuthService {
 
     public void logout(String header) {
         String refreshToken = header.replace("Bearer ", "");
-        tokenService.deleteByUser(refreshToken);
+        tokenService.deleteToken(refreshToken);
     }
 }

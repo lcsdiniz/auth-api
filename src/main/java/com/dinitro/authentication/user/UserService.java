@@ -2,7 +2,6 @@ package com.dinitro.authentication.user;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

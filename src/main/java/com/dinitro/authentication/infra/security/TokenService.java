@@ -76,7 +76,7 @@ public class TokenService {
     }
     
     @Transactional
-    public void deleteByUser(String refreshToken) {
+    public void deleteToken(String refreshToken) {
         var token = tokenRepository.findByValue(refreshToken).orElseThrow(null);
         tokenRepository.deleteByUser(token.getUser());
     }
