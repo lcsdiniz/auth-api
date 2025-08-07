@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.dinitro.authentication.adapters.in.rest.dto.MeResponseDTO;
 import com.dinitro.authentication.adapters.in.rest.dto.UserListItemResponseDTO;
+import com.dinitro.authentication.adapters.in.rest.mapper.UserMapper;
 import com.dinitro.authentication.core.user.User;
 import com.dinitro.authentication.core.user.UserRepository;
 import com.dinitro.authentication.infrastructure.security.TokenService;
@@ -33,7 +34,7 @@ public class UserService implements UserDetailsService {
         UserDetails user = userRepository.findByLogin(tokenService.extractUsername(accessToken));
         User responseUser = (User) user;
 
-        return new MeResponseDTO(responseUser.getName(), responseUser.getLogin(), responseUser.getRole());
+        return UserMapper.toMeResponse(responseUser);
     }
 
     public List<UserListItemResponseDTO> list() {
@@ -41,7 +42,7 @@ public class UserService implements UserDetailsService {
         
         return usersList
             .stream()
-            .map(user -> new UserListItemResponseDTO(user.getName(), user.getLogin(), user.getRole()))
+            .map(UserMapper::toListItem)
             .toList();
     }
 }

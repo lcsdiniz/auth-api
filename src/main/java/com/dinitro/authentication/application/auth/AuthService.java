@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.dinitro.authentication.adapters.in.rest.dto.AuthDTO;
 import com.dinitro.authentication.adapters.in.rest.dto.LoginResponseDTO;
 import com.dinitro.authentication.adapters.in.rest.dto.RegisterDTO;
+import com.dinitro.authentication.adapters.in.rest.mapper.AuthMapper;
 import com.dinitro.authentication.core.exceptions.ExpiredTokenException;
 import com.dinitro.authentication.core.exceptions.LoginAlreadyExistsException;
 import com.dinitro.authentication.core.user.User;
@@ -34,7 +35,7 @@ public class AuthService {
         if(this.userRepository.findByLogin(data.login()) != null) throw new LoginAlreadyExistsException(data.login());
         
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User user = new User(data.name(), data.login(), encryptedPassword, data.role());
+        User user = AuthMapper.toUser(data, encryptedPassword);
         this.userRepository.save(user);
     }
 
@@ -44,7 +45,7 @@ public class AuthService {
         var accessToken = tokenService.generateAccessToken((User) auth.getPrincipal());
         var refreshToken = tokenService.generateRefreshToken((User) auth.getPrincipal());
 
-        return new LoginResponseDTO(accessToken, refreshToken);
+        return AuthMapper.toLoginResponse(accessToken, refreshToken);
     }
 
     public Map<String, Object> refresh(String header) {
