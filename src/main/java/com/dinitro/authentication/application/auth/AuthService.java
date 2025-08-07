@@ -1,4 +1,4 @@
-package com.dinitro.authentication.auth;
+package com.dinitro.authentication.application.auth;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,11 +9,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.dinitro.authentication.exception.ExpiredTokenException;
-import com.dinitro.authentication.exception.LoginAlreadyExistsException;
-import com.dinitro.authentication.infra.security.TokenService;
-import com.dinitro.authentication.user.User;
-import com.dinitro.authentication.user.UserRepository;
+import com.dinitro.authentication.adapters.in.rest.dto.AuthDTO;
+import com.dinitro.authentication.adapters.in.rest.dto.LoginResponseDTO;
+import com.dinitro.authentication.adapters.in.rest.dto.RegisterDTO;
+import com.dinitro.authentication.core.exceptions.ExpiredTokenException;
+import com.dinitro.authentication.core.exceptions.LoginAlreadyExistsException;
+import com.dinitro.authentication.core.user.User;
+import com.dinitro.authentication.core.user.UserRepository;
+import com.dinitro.authentication.infrastructure.security.TokenService;
 
 @Service
 public class AuthService {

@@ -1,4 +1,4 @@
-package com.dinitro.authentication.auth;
+package com.dinitro.authentication.adapters.in.rest.dto;
 
 import org.hibernate.validator.constraints.Length;
 

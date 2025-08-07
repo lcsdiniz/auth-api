@@ -1,4 +1,4 @@
-package com.dinitro.authentication.user;
+package com.dinitro.authentication.application.user;
 
 import java.util.List;
 
@@ -6,10 +6,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestHeader;
 
-import com.dinitro.authentication.auth.MeResponseDTO;
-import com.dinitro.authentication.infra.security.TokenService;
+import com.dinitro.authentication.adapters.in.rest.dto.MeResponseDTO;
+import com.dinitro.authentication.adapters.in.rest.dto.UserListItemResponseDTO;
+import com.dinitro.authentication.core.user.User;
+import com.dinitro.authentication.core.user.UserRepository;
+import com.dinitro.authentication.infrastructure.security.TokenService;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -26,7 +28,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findByLogin(username);
     }
 
-    public MeResponseDTO me(@RequestHeader("Authorization") String header) {
+    public MeResponseDTO me(String header) {
         String accessToken = header.replace("Bearer ", "");
         UserDetails user = userRepository.findByLogin(tokenService.extractUsername(accessToken));
         User responseUser = (User) user;

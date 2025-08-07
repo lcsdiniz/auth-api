@@ -1,23 +1,17 @@
-package com.dinitro.authentication.auth;
+package com.dinitro.authentication.adapters.in.rest;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dinitro.authentication.exception.LoginAlreadyExistsException;
-import com.dinitro.authentication.infra.security.TokenService;
-import com.dinitro.authentication.user.User;
-import com.dinitro.authentication.user.UserRepository;
+import com.dinitro.authentication.adapters.in.rest.dto.AuthDTO;
+import com.dinitro.authentication.adapters.in.rest.dto.LoginResponseDTO;
+import com.dinitro.authentication.adapters.in.rest.dto.RegisterDTO;
+import com.dinitro.authentication.application.auth.AuthService;
 
 import jakarta.validation.Valid;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

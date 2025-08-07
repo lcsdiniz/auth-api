@@ -1,6 +1,5 @@
 package com.dinitro.authentication.user;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -13,13 +12,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.dinitro.authentication.auth.MeResponseDTO;
-import com.dinitro.authentication.infra.security.TokenService;
+import com.dinitro.authentication.adapters.in.rest.dto.MeResponseDTO;
+import com.dinitro.authentication.adapters.in.rest.dto.UserListItemResponseDTO;
+import com.dinitro.authentication.application.user.UserService;
+import com.dinitro.authentication.core.user.User;
+import com.dinitro.authentication.core.user.UserRole;
+import com.dinitro.authentication.infrastructure.persistence.user.UserRepositoryImpl;
+import com.dinitro.authentication.infrastructure.security.TokenService;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
     @Mock
-    private UserRepository userRepository;
+    private UserRepositoryImpl userRepository;
     @Mock
     private TokenService tokenService;
     @InjectMocks

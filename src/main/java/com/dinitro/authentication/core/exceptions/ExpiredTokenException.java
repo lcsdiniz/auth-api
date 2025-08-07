@@ -1,4 +1,4 @@
-package com.dinitro.authentication.exception;
+package com.dinitro.authentication.core.exceptions;
 
 public class ExpiredTokenException extends RuntimeException {
     public ExpiredTokenException() {

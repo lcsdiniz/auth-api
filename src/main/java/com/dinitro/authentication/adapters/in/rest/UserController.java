@@ -1,4 +1,4 @@
-package com.dinitro.authentication.user;
+package com.dinitro.authentication.adapters.in.rest;
 
 import java.util.List;
 
@@ -6,7 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dinitro.authentication.auth.MeResponseDTO;
+import com.dinitro.authentication.adapters.in.rest.dto.MeResponseDTO;
+import com.dinitro.authentication.adapters.in.rest.dto.UserListItemResponseDTO;
+import com.dinitro.authentication.application.user.UserService;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 
 

@@ -1,9 +1,9 @@
-package com.dinitro.authentication.auth;
+package com.dinitro.authentication.adapters.in.rest.dto;
 
 
 import org.hibernate.validator.constraints.Length;
 
-import com.dinitro.authentication.user.UserRole;
+import com.dinitro.authentication.core.user.UserRole;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

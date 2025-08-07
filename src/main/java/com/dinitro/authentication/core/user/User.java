@@ -1,4 +1,4 @@
-package com.dinitro.authentication.user;
+package com.dinitro.authentication.core.user;
 
 import java.util.Collection;
 import java.util.List;

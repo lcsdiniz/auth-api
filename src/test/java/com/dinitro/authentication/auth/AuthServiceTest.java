@@ -17,16 +17,20 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import com.dinitro.authentication.exception.LoginAlreadyExistsException;
-import com.dinitro.authentication.infra.security.TokenService;
-import com.dinitro.authentication.user.User;
-import com.dinitro.authentication.user.UserRepository;
-import com.dinitro.authentication.user.UserRole;
+import com.dinitro.authentication.adapters.in.rest.dto.AuthDTO;
+import com.dinitro.authentication.adapters.in.rest.dto.LoginResponseDTO;
+import com.dinitro.authentication.adapters.in.rest.dto.RegisterDTO;
+import com.dinitro.authentication.application.auth.AuthService;
+import com.dinitro.authentication.core.exceptions.LoginAlreadyExistsException;
+import com.dinitro.authentication.core.user.User;
+import com.dinitro.authentication.core.user.UserRole;
+import com.dinitro.authentication.infrastructure.persistence.user.UserRepositoryImpl;
+import com.dinitro.authentication.infrastructure.security.TokenService;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
     @Mock
-    private UserRepository userRepository;
+    private UserRepositoryImpl userRepository;
     
     @Mock
     private AuthenticationManager authenticationManager;

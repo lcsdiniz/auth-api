@@ -1,15 +1,14 @@
-package com.dinitro.authentication.infra.security;
+package com.dinitro.authentication.infrastructure.security;
 
 import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.dinitro.authentication.user.UserRepository;
+import com.dinitro.authentication.infrastructure.persistence.user.UserRepositoryImpl;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -19,9 +18,9 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
     TokenService tokenService;
-    UserRepository userRepository;
+    UserRepositoryImpl userRepository;
 
-    public SecurityFilter(TokenService tokenService, UserRepository userRepository) {
+    public SecurityFilter(TokenService tokenService, UserRepositoryImpl userRepository) {
         this.tokenService = tokenService;
         this.userRepository = userRepository;
     }

@@ -1,4 +1,4 @@
-package com.dinitro.authentication.infra.security;
+package com.dinitro.authentication.infrastructure.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

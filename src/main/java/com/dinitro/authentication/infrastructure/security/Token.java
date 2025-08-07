@@ -1,8 +1,8 @@
-package com.dinitro.authentication.infra.security;
+package com.dinitro.authentication.infrastructure.security;
 
 import java.time.Instant;
 
-import com.dinitro.authentication.user.User;
+import com.dinitro.authentication.core.user.User;
 
 import jakarta.persistence.*;
 

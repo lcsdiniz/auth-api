@@ -1,4 +1,4 @@
-package com.dinitro.authentication.user;
+package com.dinitro.authentication.core.user;
 
 public enum UserRole {
     ADMIN("admin"),
