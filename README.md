@@ -6,8 +6,9 @@
 ---
 
 ## ℹ️ Sobre
-
-Este projeto foi desenvolvido seguindo rigorosamente os princípios da **Clean Architecture**, proporcionando alta **manutenibilidade**, **testabilidade** e **desacoplamento** entre as camadas.  
+Este projeto é uma API REST desenvolvida com Spring Boot para autenticação e controle de acesso utilizando **JWT (JSON Web Token)**.  
+A aplicação permite o registro de novos usuários, login, emissão de tokens de acesso e refresh, além de proteger rotas com base em permissões definidas.
+O desenvolvimento seguiu os princípios da **Clean Architecture**, proporcionando alta **manutenibilidade**, **testabilidade** e **desacoplamento** entre as camadas.  
 
 - **Independência de frameworks:** as **entidades de domínio** não dependem de detalhes de implementação ou tecnologias específicas.  
 - **Isolamento das regras de negócio:** a lógica central do sistema permanece protegida da infraestrutura e adaptadores externos.  
